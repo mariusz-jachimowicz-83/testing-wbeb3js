@@ -1,0 +1,40 @@
+version: 2
+
+build_defaults: &build_defaults
+  working_directory: ~/aggroxd
+  docker:
+    - image: ubuntu:16.04
+  steps:
+    - checkout
+    - run: sh system_info.sh
+
+jobs:
+  build_16:
+    <<: *build_defaults
+  build_14:
+    <<: *build_defaults
+   docker:
+    - image: ubuntu:14.04
+  build_18:
+    <<: *build_defaults
+    docker:
+      - image: ubuntu:18.04 
+  build_12:
+    <<: *build_defaults
+    docker:
+      - image: ubuntu:12.04
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - build_16
+      - build_14:
+          requires:
+            - build_16
+      - build_18:
+          requires:
+            - build_14
+      - build_12:
+          requires:
+            - build_18
