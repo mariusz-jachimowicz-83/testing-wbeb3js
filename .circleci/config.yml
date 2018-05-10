@@ -1,24 +1,29 @@
-version: 2
-
 build_defaults: &build_defaults
   working_directory: ~/testing_web3js
-  docker:
-    - image: ubuntu:16.04
   steps:
     - checkout
-    - run: sh system_info.sh
+    - run: sudo apt-get install --yes curl
+    - run: curl --silent --location https://deb.nodesource.com/setup_4.x | sudo bash -
+    - run: sudo apt-get install --yes nodejs
+    - run: sudo apt-get install --yes build-essential
 
+version: 2
 jobs:
   build_16:
     <<: *build_defaults
+    docker:
+      - image: ubuntu:16.04
+
   build_14:
     <<: *build_defaults
-   docker:
-    - image: ubuntu:14.04
+    docker:
+      - image: ubuntu:14.04
+
   build_18:
     <<: *build_defaults
     docker:
       - image: ubuntu:18.04 
+
   build_12:
     <<: *build_defaults
     docker:
@@ -26,15 +31,15 @@ jobs:
 
 workflows:
   version: 2
-  test:
+  build_and_test:
     jobs:
       - build_16
-      - build_14:
-          requires:
-            - build_16
-      - build_18:
-          requires:
-            - build_14
-      - build_12:
-          requires:
-            - build_18
+      # - build_14:
+      #     requires:
+      #       - build_16
+      # - build_18:
+      #     requires:
+      #       - build_14
+      # - build_12:
+      #     requires:
+      #       - build_18
