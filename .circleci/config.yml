@@ -1,7 +1,7 @@
 version: 2
 
 build_defaults: &build_defaults
-  working_directory: ~/aggroxd
+  working_directory: ~/testing_web3js
   docker:
     - image: ubuntu:16.04
   steps:
